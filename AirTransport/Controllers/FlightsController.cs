@@ -63,6 +63,10 @@ namespace AirTransport.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdAircraft,IdOriginAirport,IdDestinationAirport,ExitTime,EstimatedArrivalTime")] Flight flight)
         {
+
+            ModelState.Remove("IdOriginAirportNavigation");
+            ModelState.Remove("IdAircraft");
+            ModelState.Remove("IdDestinationAirport");
             if (ModelState.IsValid)
             {
                 _context.Add(flight);

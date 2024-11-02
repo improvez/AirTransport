@@ -55,19 +55,25 @@ namespace AirTransport.Controllers
         // POST: Aircraft/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Type,Model,NumberOfSeats,IdCompany")] Aircraft aircraft)
         {
+            ModelState.Remove("IdCompanyNavigation");
             if (ModelState.IsValid)
             {
                 _context.Add(aircraft);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCompany"] = new SelectList(_context.Companies, "Id", "Id", aircraft.IdCompany);
+
+            // Assegure-se de que o ViewData está correto
+            ViewData["IdCompany"] = new SelectList(await _context.Companies.ToListAsync(), "Id", "Name", aircraft.IdCompany);
             return View(aircraft);
         }
+
+
 
         // GET: Aircraft/Edit/5
         public async Task<IActionResult> Edit(int? id)

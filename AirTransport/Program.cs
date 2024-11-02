@@ -9,6 +9,14 @@ builder.Services.AddDbContext<AirTransportContext>(
         options => options.UseSqlServer(connString)
     );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -22,6 +30,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
